@@ -8,3 +8,9 @@
 /spec/reports/
 /tmp/
 *.gem
+/.idea/.gitignore
+/.idea/.rakeTasks
+/.idea/intacct-ruby.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
