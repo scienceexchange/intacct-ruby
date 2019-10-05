@@ -19,7 +19,14 @@ module IntacctRuby
 
     CU_TYPES = %w(create update).freeze
 
-    LEGACY_TYPES = %w(create_sotransaction update_sotransaction)
+    LCASE_TYPES = %w(
+      readByQuery
+      read
+      readByName
+      readMore
+      create_sotransaction
+      update_sotransaction
+    )
 
     def initialize(function_type, object_type: nil, parameters:)
       @function_type = function_type.to_s
@@ -38,7 +45,7 @@ module IntacctRuby
             xml.tag!(@object_type) do
               xml << parameter_xml(@parameters)
             end
-          elsif LEGACY_TYPES.include?(@function_type)
+          elsif LCASE_TYPES.include?(@function_type)
             xml << parameter_xml(@parameters, to_case: :downcase)
           else
             xml << parameter_xml(@parameters)
