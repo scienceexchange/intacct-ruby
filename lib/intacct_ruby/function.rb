@@ -23,7 +23,6 @@ module IntacctRuby
       readByQuery
       read
       readByName
-      readMore
       create_sotransaction
       update_sotransaction
     )
