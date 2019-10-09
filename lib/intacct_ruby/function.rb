@@ -19,13 +19,17 @@ module IntacctRuby
 
     CU_TYPES = %w(create update).freeze
 
+    CAMEL_CASE_TYPES = %w(
+      readMore
+    ).freeze
+
     LCASE_TYPES = %w(
       readByQuery
       read
       readByName
       create_sotransaction
       update_sotransaction
-    )
+    ).freeze
 
     def initialize(function_type, object_type: nil, parameters:)
       @function_type = function_type.to_s
@@ -46,6 +50,8 @@ module IntacctRuby
             end
           elsif LCASE_TYPES.include?(@function_type)
             xml << parameter_xml(@parameters, to_case: :downcase)
+          elsif CAMEL_CASE_TYPES.include?(@function_type)
+            xml << parameter_xml(@parameters, to_case: nil)
           else
             xml << parameter_xml(@parameters)
           end
