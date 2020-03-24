@@ -24,6 +24,7 @@ module IntacctRuby
     ).freeze
 
     LCASE_TYPES = %w(
+      delete
       readByQuery
       read
       readByName
