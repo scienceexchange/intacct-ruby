@@ -32,19 +32,27 @@ module IntacctRuby
       update_sotransaction
     ).freeze
 
-    def initialize(function_type, object_type: nil, parameters:)
+    OPS_REQUIRING_OBJ_KEY = %w(
+      'update_sotransaction'
+    ).freeze
+
+    def initialize(function_type, object_type: nil, object_key: nil, parameters:)
       @function_type = function_type.to_s
       @object_type = object_type.to_s
+      @object_key = object_key.to_s
       @parameters = parameters
 
       validate_type!
+      validate_args!
     end
 
     def to_xml
       xml = Builder::XmlMarkup.new
 
       xml.function controlid: controlid do
-        xml.tag!(@function_type) do
+        element_attrs = {}
+        element_attrs[:key] = @object_key if @object_key.present?
+        xml.tag!(@function_type, element_attrs) do
           if CU_TYPES.include?(@function_type)
             xml.tag!(@object_type) do
               xml << parameter_xml(@parameters)
@@ -121,6 +129,13 @@ module IntacctRuby
         raise Exceptions::UnknownFunctionType,
               "Type #{@object_type} not recognized. Function Type must be " \
               "one of #{ALLOWED_TYPES}."
+      end
+    end
+
+    def validate_args!
+      if OPS_REQUIRING_OBJ_KEY.include?(@function_type) && @object_key.blank?
+        raise Exceptions::InvalidArgumentsException,
+          "#{@function_type} cannot be executed without an object key."
       end
     end
   end
